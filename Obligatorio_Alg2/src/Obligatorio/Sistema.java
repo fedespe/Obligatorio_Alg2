@@ -1,14 +1,22 @@
 package Obligatorio;
 
+import Clases.Empresa;
 import Obligatorio.Retorno.Resultado;
+import Tads.ArbolBinario;
+import Tads.NodoArbol;
+import Utilidades.Utilidades;
 
 
 public class Sistema implements ISistema {
+	
+	private ArbolBinario arbolEmpresas;
 
 	@Override
 	public Retorno inicializarSistema(int cantPuntos) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		
+		arbolEmpresas=new ArbolBinario();
+		
+		return new Retorno(Resultado.OK);
 	}
 
 	@Override
@@ -20,8 +28,20 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno registrarEmpresa(String nombre, String direccion,
 			String pais, String email_contacto, String color) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		
+		Empresa nueva= new Empresa(nombre, direccion, pais, email_contacto, color);
+		//Calculo la clave como un valor numerico
+		int clave=Utilidades.calcularClave(nombre);
+	
+		NodoArbol buscado = arbolEmpresas.buscar(clave);
+		if(buscado!=null && buscado.getDato().equals(nueva)){
+			return new Retorno(Resultado.ERROR_2);
+		}else if(!Utilidades.verificarEmail(email_contacto)){
+			return new Retorno(Resultado.ERROR_1);
+		}else{			
+			arbolEmpresas.add(clave, nueva);
+			return new Retorno(Resultado.OK);
+		}
 	}
 
 	@Override
