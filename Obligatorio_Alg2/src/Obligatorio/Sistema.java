@@ -8,13 +8,14 @@ import Utilidades.Utilidades;
 
 
 public class Sistema implements ISistema {
-	
+	public enum TipoPunto {CIUDAD,DATACENTER}; //Uso Opcional
+        
 	private ArbolBinario arbolEmpresas;
 
 	@Override
 	public Retorno inicializarSistema(int cantPuntos) {
 		
-		arbolEmpresas=new ArbolBinario();
+		arbolEmpresas = new ArbolBinario();
 		
 		return new Retorno(Resultado.OK);
 	}
