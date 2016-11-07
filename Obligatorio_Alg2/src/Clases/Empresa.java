@@ -1,7 +1,5 @@
 package Clases;
 
-import Tads.AristaLista;
-
 public class Empresa {
 	private String nombre;
 	private String direccion;
@@ -49,9 +47,7 @@ public class Empresa {
 	@Override
     public boolean equals(Object obj) {
         Empresa o=(Empresa)obj;
-        if(this.nombre==o.getNombre())
-            return true;
-        return false;
+       return this.nombre == o.getNombre();
     }
 	
 }

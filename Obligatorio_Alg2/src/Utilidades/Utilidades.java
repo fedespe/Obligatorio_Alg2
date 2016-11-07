@@ -11,7 +11,7 @@ public class Utilidades {
 	public static int calcularClave(String nombre) {
 		int retorno=0;
 		for(int i=0;i<nombre.length();i++){
-			retorno+=(int)nombre.charAt(i);
+			retorno+=(int)nombre.charAt(i)*i;
 		}
 		return retorno;
 	}

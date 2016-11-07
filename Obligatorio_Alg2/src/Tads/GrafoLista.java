@@ -4,7 +4,7 @@ package Tads;
 
 public class GrafoLista {
     int size;
-    int cantNodos;
+    int cantNodosUtilizados;
     Lista[] listaAdyacencia;
     boolean[] nodosUsados;
     //agregado para guardar la informacion de los nodos
@@ -26,12 +26,12 @@ public class GrafoLista {
 		this.size = size;
 	}
 
-	public int getCantNodos() {
-		return cantNodos;
+	public int getCantNodosUtilizados() {
+		return cantNodosUtilizados;
 	}
 
-	public void setCantNodos(int cantNodos) {
-		this.cantNodos = cantNodos;
+	public void setCantNodosUtilizados(int cantNodosUtilizados) {
+		this.cantNodosUtilizados = cantNodosUtilizados;
 	}
 
 	public Lista[] getListaAdyacencia() {
@@ -50,31 +50,31 @@ public class GrafoLista {
 		this.nodosUsados = nodosUsados;
 	}
 
-	//Crea el grafo vacio (sin nodos ni aristas) con capacidad de almacenamiento de n vÃ©rtices
+	//Crea el grafo vacio (sin nodos ni aristas) con capacidad de almacenamiento de n vértices
     public GrafoLista(int n) {
-        this.size = 0;
-        this.cantNodos = n;
-        this.listaAdyacencia = new Lista[this.cantNodos+1];
-        for (int i = 1; i<=this.cantNodos; i++)
+        this.size = n;
+        this.cantNodosUtilizados = 0;
+        this.listaAdyacencia = new Lista[this.size+1];
+        for (int i = 0; i<this.size; i++)
             this.listaAdyacencia[i]= new Lista();		
 
-        this.nodosUsados = new boolean[this.cantNodos+1];
-        this.datosNodosUsados = new Object[this.cantNodos+1];
+        this.nodosUsados = new boolean[this.size+1];
+        this.datosNodosUsados = new Object[this.size+1];
     }
     
-    //var que si no es dirigido hay que hacer la otra arista
+    public void agregarVertice(int v, Object o) {
+        this.nodosUsados[v]=true;
+        this.datosNodosUsados[v]=o;
+        this.cantNodosUtilizados ++;
+    }
+    
+    //ver que si no es dirigido hay que hacer la otra arista
     public void agregarArista(int origen, int destino, int peso) {
         AristaLista nueva=new AristaLista(destino, peso);
         this.listaAdyacencia[origen].agregarInicio(nueva);
         
         AristaLista nueva2=new AristaLista(origen, peso);
         this.listaAdyacencia[destino].agregarInicio(nueva2);
-    }
-
-    public void agregarVertice(int v, Object o) {
-        this.nodosUsados[v]=true;
-        this.datosNodosUsados[v]=o;
-        this.size ++;
     }
 
     public void eliminarArista(int origen, int destino) {
@@ -85,8 +85,8 @@ public class GrafoLista {
         this.listaAdyacencia[destino].borrar(buscada2);
     }
 
-    public boolean esVacio() {
-        return this.size==0;
+    public boolean estaVacio() {
+        return this.cantNodosUtilizados==0;
     }
 
     public boolean sonAdyacentes(int a, int b) {
@@ -96,13 +96,13 @@ public class GrafoLista {
     
     public void eliminarVertice(int v) {
         this.nodosUsados[v]=false;
-        this.size --;
+        this.cantNodosUtilizados --;
 
         //Elimino las aristas donde v es miembro
         this.listaAdyacencia[v] = new Lista();	
         //BUSCAR EN TODOS LOS VERTICES LA ARISTA
         AristaLista aristaV=new AristaLista(v, 0);
-        for (int i = 1; i<=cantNodos; i++){
+        for (int i = 0; i<size; i++){
             this.listaAdyacencia[i].borrar(aristaV);
         }
                 	
@@ -115,6 +115,10 @@ public class GrafoLista {
     public boolean estaVertice(int v) {
         return this.nodosUsados[v];
     }
+
+	public boolean hayLugar() {
+		return cantNodosUtilizados < size;
+	}
 
 
 

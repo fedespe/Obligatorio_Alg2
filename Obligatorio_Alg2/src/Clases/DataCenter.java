@@ -1,14 +1,15 @@
 package Clases;
 
 public class DataCenter extends Ubicable{
-	private String empresa;
+	private Empresa empresa;
 	private int capacidadCPUenHoras;
 	private int costoCPUporHora;
 	
-	public String getEmpresa() {
+	
+	public Empresa getEmpresa() {
 		return empresa;
 	}
-	public void setEmpresa(String empresa) {
+	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
 	public int getCapacidadCPUenHoras() {
@@ -23,7 +24,7 @@ public class DataCenter extends Ubicable{
 	public void setCostoCPUporHora(int costoCPUporHora) {
 		this.costoCPUporHora = costoCPUporHora;
 	}
-	public DataCenter(String nombre, double coordX, double coordY, String empresa, int capacidadCPUenHoras,
+	public DataCenter(String nombre, double coordX, double coordY, Empresa empresa, int capacidadCPUenHoras,
 			int costoCPUporHora) {
 		super(nombre, coordX, coordY);
 		this.empresa = empresa;
