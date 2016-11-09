@@ -1,6 +1,7 @@
 
 package Tads;
 
+import Clases.ObligatorioException;
 
 public class GrafoLista {
     int size;
@@ -69,11 +70,18 @@ public class GrafoLista {
     }
     
     //ver que si no es dirigido hay que hacer la otra arista
-    public void agregarArista(int origen, int destino, int peso) {
+    public void agregarArista(int origen, int destino, int peso) throws ObligatorioException {
         AristaLista nueva=new AristaLista(destino, peso);
+        if(this.listaAdyacencia[origen].buscar(nueva)!=null){
+        	throw new ObligatorioException("Ya existe arista");
+        }
         this.listaAdyacencia[origen].agregarInicio(nueva);
         
         AristaLista nueva2=new AristaLista(origen, peso);
+        if(this.listaAdyacencia[destino].buscar(nueva2)!=null){//Esta no es necesaria por que entraria en la otra exception antes
+        	throw new ObligatorioException("Ya existe arista");
+        }
+        
         this.listaAdyacencia[destino].agregarInicio(nueva2);
     }
 

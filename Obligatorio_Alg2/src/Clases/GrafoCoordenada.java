@@ -11,30 +11,30 @@ public class GrafoCoordenada {
 		this.grafo = new GrafoLista(cantidadNodos);
 	}
 
-	public boolean agregarArista(Ubicable origen, Ubicable destino, int peso) {
+	public void agregarArista(Ubicable origen, Ubicable destino, int peso) throws ObligatorioException {
 		int verticeOrigen,verticeDestino;
 		//Ver si esta bien que la cantidad de iteraciones 
-		//del for es grafo.getcantnodos
+		//del for es grafo.getSize
 		for(int i=0;i<grafo.getSize();i++){
 			verticeOrigen=hash(origen.getCoordX(),origen.getCoordY(),i);
 			//falta vertice destino, pero para todo esto tengo que tener un metodo que sea 
 			//buscar coordenadas en grafo y que me devuelva la posicion en el grafo
 			if(grafo.getDatosNodosUsados()[verticeOrigen].equals(origen)){
-				for(int j=0;j<grafo.getSize();i++){
+				for(int j=0;j<grafo.getSize();j++){
 					verticeDestino=hash(destino.getCoordX(),destino.getCoordY(),j);
 					if(grafo.getDatosNodosUsados()[verticeDestino].equals(destino)){
-						grafo.agregarArista(verticeOrigen, verticeDestino, peso);
-						return true;
+						grafo.agregarArista(verticeOrigen, verticeDestino, peso);//Tira una exception si ya existe la arista
+						return;
 					}
 				}	
 			}
 		}
-		return false;
+		throw new ObligatorioException("No existe coordenada inicial o final");
 	}
 	
 	public boolean agregarVertice(Ubicable v) {
 		int vertice;
-		if(grafo.getSize()!=grafo.getCantNodosUtilizados()){
+		if(grafo.getSize()!=grafo.getCantNodosUtilizados()){//Si queda lugar
 			for(int i=0;i<grafo.getSize();i++){
 				vertice=hash(v.getCoordX(),v.getCoordY(),i);
 				if(grafo.getDatosNodosUsados()[vertice]==null){

@@ -4,6 +4,8 @@ import Clases.Ciudad;
 import Clases.DataCenter;
 import Clases.Empresa;
 import Clases.GrafoCoordenada;
+import Clases.ObligatorioException;
+import Clases.Ubicable;
 import Obligatorio.Retorno.Resultado;
 import Tads.ArbolBinario;
 import Tads.NodoArbol;
@@ -105,8 +107,25 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno registrarTramo(Double coordXi, Double coordYi,
 			Double coordXf, Double coordYf, int peso) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		try {
+			if(peso <= 0)
+				return new Retorno(Resultado.ERROR_1);
+			if(coordXf.equals(coordXi) && coordYi.equals(coordYf))
+				return new Retorno(Resultado.ERROR_5);
+			Ubicable uOrigen= new Ubicable("", coordXi, coordYi);
+			Ubicable uDestino= new Ubicable("", coordXf, coordYf);
+		
+			mapa.agregarArista(uOrigen, uDestino, peso);
+			return new Retorno(Resultado.OK);
+		} catch (ObligatorioException e) {
+			if(e.getMessage()=="No existe coordenada inicial o final"){
+				return new Retorno(Resultado.ERROR_2);
+			}else if(e.getMessage()=="Ya existe arista"){
+				return new Retorno(Resultado.ERROR_3);
+			}else{
+				return new Retorno(Resultado.ERROR_4);//No tendria que entrar nunca, en caso que tire otra exception
+			}
+		}
 	}
 
 	@Override
