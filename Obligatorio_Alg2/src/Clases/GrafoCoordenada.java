@@ -49,23 +49,25 @@ public class GrafoCoordenada {
 			
 	}
 	
-	public boolean eliminarArista(Ubicable origen, Ubicable destino) {
+	public void eliminarArista(Ubicable origen, Ubicable destino) throws ObligatorioException {
 		int verticeOrigen,verticeDestino;
+		//Ver si esta bien que la cantidad de iteraciones 
+		//del for es grafo.getSize
 		for(int i=0;i<grafo.getSize();i++){
 			verticeOrigen=hash(origen.getCoordX(),origen.getCoordY(),i);
 			//falta vertice destino, pero para todo esto tengo que tener un metodo que sea 
 			//buscar coordenadas en grafo y que me devuelva la posicion en el grafo
 			if(grafo.getDatosNodosUsados()[verticeOrigen].equals(origen)){
-				for(int j=0;j<grafo.getSize();i++){
+				for(int j=0;j<grafo.getSize();j++){
 					verticeDestino=hash(destino.getCoordX(),destino.getCoordY(),j);
 					if(grafo.getDatosNodosUsados()[verticeDestino].equals(destino)){
-						grafo.eliminarArista(verticeOrigen, verticeDestino);	
-						return true;
+						grafo.eliminarArista(verticeOrigen, verticeDestino);//Tira una exception si ya existe la arista
+						return;
 					}
 				}	
 			}
 		}
-		return false;
+		throw new ObligatorioException("No existe coordenada inicial o final");
 	}
 	
 	public boolean esVacio() {
@@ -77,8 +79,16 @@ public class GrafoCoordenada {
 		return true;
 	}
 	
-	public void eliminarVertice(Ubicable v) {
-		//hash
+	public void eliminarVertice(Ubicable v) throws ObligatorioException {
+		int vertice;
+		for(int i=0;i<grafo.getSize();i++){
+			vertice=hash(v.getCoordX(),v.getCoordY(),i);
+			if(grafo.getDatosNodosUsados()[vertice]!=null && grafo.getDatosNodosUsados()[vertice].equals(v)){
+				grafo.eliminarVertice(vertice);
+				return;
+			}
+		}
+		throw new ObligatorioException("No existe coordenada");
 	}
 	
 	public Lista verticesAdyacentes(Ubicable v) {

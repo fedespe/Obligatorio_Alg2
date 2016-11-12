@@ -85,11 +85,17 @@ public class GrafoLista {
         this.listaAdyacencia[destino].agregarInicio(nueva2);
     }
 
-    public void eliminarArista(int origen, int destino) {
+    public void eliminarArista(int origen, int destino) throws ObligatorioException {
         AristaLista buscada=new AristaLista(destino, 0);
+        if(this.listaAdyacencia[origen].buscar(buscada)==null){//Este control se podria agregar en borrar para hacer mas eficiente el metodo
+        	throw new ObligatorioException("No existe arista");
+        }
         this.listaAdyacencia[origen].borrar(buscada);
         
         AristaLista buscada2=new AristaLista(origen, 0);
+        if(this.listaAdyacencia[destino].buscar(buscada2)==null){//Este control se podria agregar en borrar para hacer mas eficiente el metodo
+        	throw new ObligatorioException("No existe arista");
+        }
         this.listaAdyacencia[destino].borrar(buscada2);
     }
 
@@ -105,13 +111,15 @@ public class GrafoLista {
     public void eliminarVertice(int v) {
         this.nodosUsados[v]=false;
         this.cantNodosUtilizados --;
+        this.datosNodosUsados[v]=new Object();//ver que sea asi que se limpia este registro
 
         //Elimino las aristas donde v es miembro
         this.listaAdyacencia[v] = new Lista();	
         //BUSCAR EN TODOS LOS VERTICES LA ARISTA
         AristaLista aristaV=new AristaLista(v, 0);
         for (int i = 0; i<size; i++){
-            this.listaAdyacencia[i].borrar(aristaV);
+        	if(listaAdyacencia[i].getInicio()!=null)//ver que aca esta el error
+        		this.listaAdyacencia[i].borrar(aristaV);
         }
                 	
     }

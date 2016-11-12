@@ -94,13 +94,18 @@ public class Main {
         p.ver(s.eliminarPunto(1.00, 1.00).resultado, Retorno.Resultado.OK, "Se elimina el punto Ciudad de Prueba.");
         
         //Requerimiento 2.5 - Eliminar tramo
+        p.ver(s.eliminarTramo(11.0, 11.0, 12.0, 12.0).resultado, Retorno.Resultado.ERROR_2, "Se elimina tramo con coordenadas validas pero nunca hubo conexion entre ellas.");
         p.ver(s.eliminarTramo(14.0, 14.0, 17.0, 17.0).resultado, Retorno.Resultado.OK, "Se elimina tramo entre C5 y DC3.");
         p.ver(s.eliminarTramo(100.0, 100.0, 16.0, 16.0).resultado, Retorno.Resultado.ERROR_1, "Se intenta eliminar un tramo con coordenada inicial sin data-center ni ciudad en ella.");
         p.ver(s.eliminarTramo(16.0, 16.0, 100.0, 100.0).resultado, Retorno.Resultado.ERROR_1, "Se intenta eliminar un tramo con coordenada final sin data-center ni ciudad en ella.");
         p.ver(s.eliminarTramo(14.0, 14.0, 17.0, 17.0).resultado, Retorno.Resultado.ERROR_2, "Se intenta eliminar un tramo con coordenadas válidas pero sin conexión entre ambos puntos (la conexión ya fué eliminada aneriormente de forma directa).");
-        p.ver(s.eliminarTramo(1.0, 1.0, 10.0, 10.0).resultado, Retorno.Resultado.ERROR_2, "Se intenta eliminar un tramo con coordenadas válidas pero sin conexión entre ambos puntos (la conexión ya fué eliminada aneriormente de forma directa).");
+        p.ver(s.eliminarTramo(1.0, 1.0, 10.0, 10.0).resultado, Retorno.Resultado.ERROR_1, "Se intenta eliminar un tramo con coordenadas válidas pero sin conexión entre ambos puntos (la conexión ya fué eliminada aneriormente de forma indirecta).");
         
         //Requerimiento 1.2 - Destruir Sistema
         p.ver(s.destruirSistema().resultado, Retorno.Resultado.OK, "Se destruye el Sistema.");
+    
+        
+    
+    
     }
 }

@@ -31,8 +31,9 @@ public class Sistema implements ISistema {
 	
 	@Override
 	public Retorno destruirSistema() {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		arbolEmpresas=null;
+		mapa=null;
+		return new Retorno(Resultado.OK);
 	}
 	
 	@Override
@@ -131,14 +132,40 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno eliminarTramo(Double coordXi, Double coordYi,
 			Double coordXf, Double coordYf) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		Ubicable uOrigen= new Ubicable("", coordXi, coordYi);
+		Ubicable uDestino= new Ubicable("", coordXf, coordYf);
+		
+		try {
+			mapa.eliminarArista(uOrigen, uDestino);
+			return new Retorno(Resultado.OK);
+		} catch (ObligatorioException e) {
+			if(e.getMessage().equals("No existe coordenada inicial o final")){
+				return new Retorno(Resultado.ERROR_1);				
+			}
+			else if(e.getMessage().equals("No existe arista")){
+				return new Retorno(Resultado.ERROR_2);				
+			}else{
+				return new Retorno(Resultado.ERROR_4);//No tendria que entrar nunca, en caso que tire otra exception
+			}
+		}
+		
+		
 	}
 
 	@Override
 	public Retorno eliminarPunto(Double coordX, Double coordY) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		Ubicable puntoMapa= new Ubicable("", coordX, coordY);
+		try {
+			mapa.eliminarVertice(puntoMapa);
+			return new Retorno(Resultado.OK);
+		} catch (ObligatorioException e) {
+			if(e.getMessage().equals("No existe coordenada")){
+				return new Retorno(Resultado.ERROR_1);				
+			}else{
+				return new Retorno(Resultado.ERROR_4);//No tendria que entrar nunca, en caso que tire otra exception
+			}
+		}
+		
 	}
 
 	@Override
