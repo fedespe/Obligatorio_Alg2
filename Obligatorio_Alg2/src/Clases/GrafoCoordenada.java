@@ -1,7 +1,9 @@
 package Clases;
 
+import Tads.AristaLista;
 import Tads.GrafoLista;
 import Tads.Lista;
+import Tads.Nodo;
 
 public class GrafoCoordenada {
 	private GrafoLista grafo;
@@ -96,7 +98,7 @@ public class GrafoCoordenada {
 		return new Lista();
 	}
 	
-	public boolean estaVertice(Ubicable v) { //Debe retorar true si hay un vértice con esas coordenadas
+	public boolean estaVertice(Ubicable v) {
 		//hash
 		return false;
 	}
@@ -121,5 +123,138 @@ public class GrafoCoordenada {
 			}
 		}
 		return false;
-	}	
+	}
+	
+	public String procesarInformacion(Ubicable v, int esfuerzoRequerido) throws ObligatorioException{
+		String retorno = "";
+		DataCenter dc = null;
+		Empresa e = null;
+		int t = grafo.getSize();
+		boolean[] visitado = new boolean[t]; //Todos en false por defecto
+		int [] costo = new int[t];
+		int [] costoTotal = new int[t];
+		
+		t--;
+		for(;t>=0;t--){
+			costo[t] = costoTotal[t] = Integer.MAX_VALUE;
+		}
+		t = grafo.getSize()-1;
+
+		int vertice;
+		for(int i=0;i<grafo.getSize();i++){
+			vertice=hash(v.getCoordX(),v.getCoordY(),i);
+			
+			if(grafo.getDatosNodosUsados()[vertice] != null && grafo.getDatosNodosUsados()[vertice].equals(v)){
+				dc = (DataCenter)grafo.getDatosNodosUsados()[vertice];
+				if(esfuerzoRequerido <= dc.getCapacidadCPUenHoras()){
+					dc.setCapacidadCPUenHoras(dc.getCapacidadCPUenHoras()-esfuerzoRequerido);
+					return dc.getNombre()+"|"+0;
+				}
+				else{
+					visitado[vertice] = true;
+					costo[vertice] = 0;
+					e = dc.getEmpresa();
+					
+					Nodo aux = grafo.getListaAdyacencia()[vertice].getInicio();
+					while(aux != null){
+						AristaLista a = (AristaLista)aux.getDato();
+						
+						costo[a.getVerticeAdyacente()] = a.getPeso();
+						
+						Ubicable ubi = (Ubicable)grafo.getDatosNodosUsados()[a.getVerticeAdyacente()];
+						if(ubi instanceof DataCenter){
+							DataCenter dc2 = (DataCenter)ubi;
+							if(dc2.getCapacidadCPUenHoras() >= esfuerzoRequerido){
+								if(e.equals(dc2.getEmpresa()))
+									costoTotal[a.getVerticeAdyacente()] = a.getPeso();
+								else
+									costoTotal[a.getVerticeAdyacente()] = a.getPeso() + dc2.getCostoCPUporHora() * esfuerzoRequerido;
+							}
+						}
+						aux = aux.getSig();
+					}
+					
+					while(!todosVisitados(visitado)){
+						int minimo = minimoSinVisitar(visitado,costo);
+						visitado[minimo] = true;
+						
+						Nodo aux2 = grafo.getListaAdyacencia()[minimo].getInicio();
+						
+						while(aux2 != null){
+							AristaLista a = (AristaLista)aux2.getDato();
+							
+							if(!visitado[a.getVerticeAdyacente()]){
+								
+								if(costo[a.getVerticeAdyacente()] > costo[minimo] + a.getPeso())
+									costo[a.getVerticeAdyacente()] = costo[minimo] + a.getPeso();
+								
+								Ubicable ubi = (Ubicable)grafo.getDatosNodosUsados()[a.getVerticeAdyacente()];
+								if(ubi instanceof DataCenter){
+									DataCenter dc2 = (DataCenter)ubi;
+									if(dc2.getCapacidadCPUenHoras() >= esfuerzoRequerido){
+										if(e.equals(dc2.getEmpresa())){
+											costoTotal[a.getVerticeAdyacente()] = costo[a.getVerticeAdyacente()];
+										}
+										else{
+											costoTotal[a.getVerticeAdyacente()] = costo[a.getVerticeAdyacente()] + dc2.getCostoCPUporHora() * esfuerzoRequerido;
+										}
+									}
+								}
+							}
+							aux2 = aux2.getSig();
+						}
+					}
+					int posicionMinimo = posicionMinimo(costoTotal);
+					
+					if(costoTotal[posicionMinimo] == Integer.MAX_VALUE)
+						throw new ObligatorioException("No existe un DataCenter que pueda procesar la información.");
+					
+					DataCenter ret = (DataCenter)grafo.getDatosNodosUsados()[posicionMinimo];
+					
+					ret.setCapacidadCPUenHoras(ret.getCapacidadCPUenHoras()-esfuerzoRequerido);
+					
+					retorno = ret.getNombre() + " | " + costoTotal[posicionMinimo];
+					
+					return retorno;
+				}
+			}
+		}
+		throw new ObligatorioException("No existe un DataCenter con esas Coordenadas.");
+	}
+
+	private int posicionMinimo(int[] costoTotal) {
+		int pos = 0;
+		int min = Integer.MAX_VALUE;
+		
+		for(int i=0;i<costoTotal.length;i++){
+				if(costoTotal[i] <= min){
+					min = costoTotal[i];
+					pos = i;
+				}
+		}
+		return pos;
+	}
+
+	private boolean todosVisitados(boolean[] v){
+		for(int i = 0;i<v.length;i++){
+			if(v[i] == false)
+				return false;
+		}
+		return true;
+	}
+	
+	private int minimoSinVisitar(boolean[] v, int[] costo){
+		int pos = 0;
+		int min = Integer.MAX_VALUE;
+		
+		for(int i=0;i<v.length;i++){
+			if(!v[i]){
+				if(costo[i] <= min){
+					min = costo[i];
+					pos = i;
+				}
+			}
+		}
+		return pos;
+	}
 }

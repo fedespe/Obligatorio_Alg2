@@ -177,8 +177,21 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno procesarInformación(Double coordX, Double coordY,
 			int esfuerzoCPUrequeridoEnHoras) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		
+		Ubicable v = new Ubicable("",coordX, coordY);
+		
+		try {
+			System.out.println(mapa.procesarInformacion(v, esfuerzoCPUrequeridoEnHoras));
+			return new Retorno(Resultado.OK);
+		} catch (ObligatorioException e) {
+			if(e.getMessage().equals("No existe un DataCenter que pueda procesar la información."))
+					return new Retorno(Resultado.ERROR_2);
+			if(e.getMessage().equals("No existe un DataCenter con esas Coordenadas."))
+					return new Retorno(Resultado.ERROR_1);
+			
+			//No debería entrar en este error, pero por si salta una excepción que no esté contemplada, se crea este retorno.
+			return new Retorno(Resultado.ERROR_3);
+		}
 	}
 
 	@Override

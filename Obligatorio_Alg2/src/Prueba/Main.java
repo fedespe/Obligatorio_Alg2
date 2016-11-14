@@ -101,11 +101,15 @@ public class Main {
         p.ver(s.eliminarTramo(14.0, 14.0, 17.0, 17.0).resultado, Retorno.Resultado.ERROR_2, "Se intenta eliminar un tramo con coordenadas válidas pero sin conexión entre ambos puntos (la conexión ya fué eliminada aneriormente de forma directa).");
         p.ver(s.eliminarTramo(1.0, 1.0, 10.0, 10.0).resultado, Retorno.Resultado.ERROR_1, "Se intenta eliminar un tramo con coordenadas válidas pero sin conexión entre ambos puntos (la conexión ya fué eliminada aneriormente de forma indirecta).");
         
+        //Requerimiento 3.2 - Solicitud de procesamiento
+        p.ver(s.procesarInformación(1.0, 1.0, 10).resultado, Retorno.Resultado.ERROR_1, "Se manda solicitud de procesamiento a un punto inexistente.");
+        p.ver(s.procesarInformación(15.0, 15.0, 20).resultado, Retorno.Resultado.ERROR_2, "Se manda solicitud de procesamiento a un DataCenter existente pero con una cantidad de información que ninguno puede procesar.");
+        p.ver(s.procesarInformación(15.0, 15.0, 5).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en el mismo DC inicial.");
+        p.ver(s.procesarInformación(18.0, 18.0, 8).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en otro DC.");
+        p.ver(s.procesarInformación(15.0, 15.0, 6).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en otro DC debido a que al incial se le había bajado la capacidad directamente.");
+        p.ver(s.procesarInformación(16.0, 16.0, 2).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en otro DC debido a que al incial se le había bajado la capacidad indirectamente.");
+        
         //Requerimiento 1.2 - Destruir Sistema
         p.ver(s.destruirSistema().resultado, Retorno.Resultado.OK, "Se destruye el Sistema.");
-    
-        
-    
-    
     }
 }
