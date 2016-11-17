@@ -28,7 +28,7 @@ public class GrafoCoordenada {
 						grafo.agregarArista(verticeOrigen, verticeDestino, peso);//Tira una exception si ya existe la arista
 						return;
 					}
-				}	
+				}
 			}
 		}
 		throw new ObligatorioException("No existe coordenada inicial o final");
@@ -47,8 +47,7 @@ public class GrafoCoordenada {
 				}
 			}
 		}
-		return false;
-			
+		return false;	
 	}
 	
 	public void eliminarArista(Ubicable origen, Ubicable destino) throws ObligatorioException {
@@ -256,5 +255,55 @@ public class GrafoCoordenada {
 			}
 		}
 		return pos;
+	}
+
+	public String obtenerURL() {
+		String ama = "0xF7FE2E";
+		String ver = "0x04B431";
+		String azu = "0x2E2EFE";
+		String lil = "0xD0A9F5";
+		
+		String marcador = "&markers=color:";
+		String label = "%7Clabel:";
+		String coordx="%7C";
+		String coordy=",%20";
+		
+		String retorno = "http://maps.googleapis.com/maps/api/staticmap?size=1200x800&maptype=roadmap&sensor=false";
+		
+		//&markers=color:0xF7FE2E%7Clabel:1%7C-30.92,%20-57.44
+		if(!grafo.estaVacio()){
+			for(int i=0;i<grafo.getSize();i++){
+				if(grafo.getNodosUsados()[i]){
+					String s = marcador;
+					Ubicable u = (Ubicable)grafo.getDatosNodosUsados()[i];
+					if(u instanceof Ciudad){
+						s += ama;
+					}
+					else{
+						DataCenter dc = (DataCenter)u;
+						String c = dc.getEmpresa().getColor();
+						if(c.equalsIgnoreCase("VERDE")){
+							s += ver;
+						}
+						else if(c.equalsIgnoreCase("AZUL")){
+							s += azu;
+						}
+						else if(c.equalsIgnoreCase("LILA")){
+							s += lil;
+						}
+						else{
+							s += c;
+						}
+					}
+					s+= label + i + coordx + u.getCoordX() + coordy + u.getCoordY();
+					retorno += s;
+				}
+			}
+		}
+		else{
+			retorno += "&center=Uruguay&zoom=7";
+		}
+		
+		return retorno;
 	}
 }

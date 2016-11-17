@@ -19,10 +19,10 @@ public class Main {
         p.ver(s.inicializarSistema(2).resultado, Retorno.Resultado.OK, "Se inicializa el Sistema (con un máximo de 2 puntos).");
     	
     	//Requerimiento 2.1 - Registrar empresa
-        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email@email", "Rojo").resultado, Retorno.Resultado.ERROR_1, "Se intenta registrar una empresa con un email no válido -sin Punto-.");
-        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "emailemail", "Rojo").resultado, Retorno.Resultado.ERROR_1, "Se intenta registrar una empresa con un email no válido -sin Arroba-.");
-        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email@email.com", "Rojo").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
-        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email@email.com", "Rojo").resultado, Retorno.Resultado.ERROR_2, "Se intenta registrar una empresa con un nombre igual a otra ya registrada.");
+        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email@email", "Azul").resultado, Retorno.Resultado.ERROR_1, "Se intenta registrar una empresa con un email no válido -sin Punto-.");
+        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "emailemail", "Azul").resultado, Retorno.Resultado.ERROR_1, "Se intenta registrar una empresa con un email no válido -sin Arroba-.");
+        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email@email.com", "Azul").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
+        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email@email.com", "Azul").resultado, Retorno.Resultado.ERROR_2, "Se intenta registrar una empresa con un nombre igual a otra ya registrada.");
         
         //Requerimiento 2.2 - Registrar ciudad
         p.ver(s.registrarCiudad("Ciudad 1", 10.0, 10.0).resultado, Retorno.Resultado.OK, "Se registra una ciudad.");
@@ -40,9 +40,9 @@ public class Main {
         p.ver(s.inicializarSistema(11).resultado, Retorno.Resultado.OK, "Se inicializa el Sistema (con un máximo de 11 puntos).");
         
         //Requerimiento 2.1 - Registrar empresa
-        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email1@email.com", "Rojo").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
+        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email1@email.com", "Azul").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
         p.ver(s.registrarEmpresa("Empresa 2", "Dir 2", "Pais 2", "email2@email.com", "Verde").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
-        p.ver(s.registrarEmpresa("Empresa 3", "Dir 3", "Pais 3", "email3@email.com", "Negro").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
+        p.ver(s.registrarEmpresa("Empresa 3", "Dir 3", "Pais 3", "email3@email.com", "Lila").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
         
         //Requerimiento 2.2 - Registrar ciudad
         p.ver(s.registrarCiudad("Ciudad de Prueba", 1.0, 1.0).resultado, Retorno.Resultado.OK, "Se registra una ciudad.");
@@ -108,6 +108,9 @@ public class Main {
         p.ver(s.procesarInformación(18.0, 18.0, 8).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en otro DC.");
         p.ver(s.procesarInformación(15.0, 15.0, 6).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en otro DC debido a que al incial se le había bajado la capacidad directamente.");
         p.ver(s.procesarInformación(16.0, 16.0, 2).resultado, Retorno.Resultado.OK, "Se manda solicitud de procesamiento que da OK en otro DC debido a que al incial se le había bajado la capacidad indirectamente.");
+        
+        //Requerimiento 3.1 - Mapa de estado
+        p.ver(s.mapaEstado().resultado, Retorno.Resultado.OK, "Se abre el navegador por defecto con el mapa de estado.");
         
         //Requerimiento 1.2 - Destruir Sistema
         p.ver(s.destruirSistema().resultado, Retorno.Resultado.OK, "Se destruye el Sistema.");

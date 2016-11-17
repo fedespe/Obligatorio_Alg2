@@ -6,5 +6,4 @@ public class Ciudad extends Ubicable{
 		super(nombre, coordX, coordY);
 		// TODO Auto-generated constructor stub
 	}
-	
 }

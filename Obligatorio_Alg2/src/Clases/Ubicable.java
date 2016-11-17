@@ -46,6 +46,4 @@ public class Ubicable {
             return true;
         return false;
 	}
-	
-	
 }

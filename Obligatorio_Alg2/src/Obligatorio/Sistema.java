@@ -167,13 +167,19 @@ public class Sistema implements ISistema {
 		}
 		
 	}
-
+	
 	@Override
 	public Retorno mapaEstado() {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		String direccion = mapa.obtenerURL();
+		try{
+			Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + direccion);
+		}
+		catch(Exception err){
+			return new Retorno(Resultado.ERROR_1);//No tendria que entrar nunca, pero por si lanza alguna excepcion, agregamos este error
+		}
+		return new Retorno(Resultado.OK);
 	}
-
+	
 	@Override
 	public Retorno procesarInformación(Double coordX, Double coordY,
 			int esfuerzoCPUrequeridoEnHoras) {
