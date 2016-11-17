@@ -107,7 +107,7 @@ public class GrafoCoordenada {
 	}
 	
 	private int hash(double x, double y, int i){
-		int retorno= (int)(x+(2*y))+i;
+		int retorno= (int)(Math.abs(x)+(2*Math.abs(y)))+i;
 		return retorno%grafo.getSize();
 	}
 
@@ -264,14 +264,17 @@ public class GrafoCoordenada {
 		String lil = "0xD0A9F5";
 		
 		String marcador = "&markers=color:";
-		String label = "%7Clabel:";
-		String coordx="%7C";
+		//String label = "|label:";
+		String coordx="|";
 		String coordy=",%20";
+		
+		String ruta = "&path=color:0xff0000ff|weight:3";
 		
 		String retorno = "http://maps.googleapis.com/maps/api/staticmap?size=1200x800&maptype=roadmap&sensor=false";
 		
-		//&markers=color:0xF7FE2E%7Clabel:1%7C-30.92,%20-57.44
 		if(!grafo.estaVacio()){
+			String[] vectAdy = new String[grafo.getSize()*(grafo.getSize()-1)/2];
+			
 			for(int i=0;i<grafo.getSize();i++){
 				if(grafo.getNodosUsados()[i]){
 					String s = marcador;
@@ -295,8 +298,31 @@ public class GrafoCoordenada {
 							s += c;
 						}
 					}
-					s+= label + i + coordx + u.getCoordX() + coordy + u.getCoordY();
+					//s += label + i;
+					s+= coordx + u.getCoordX() + coordy + u.getCoordY();
 					retorno += s;
+					
+					//&path=color:0xff0000ff%7Cweight:3%7C-30.92,%20-57.44%7C-31.58,%20-55.24
+					Nodo n = ((Lista)grafo.getListaAdyacencia()[i]).getInicio();
+					while(n != null){
+						int adyacente = ((AristaLista)n.getDato()).getVerticeAdyacente();
+						Ubicable ady = (Ubicable)grafo.getDatosNodosUsados()[adyacente];
+						
+						vectAdy = agregarTramo(vectAdy,u.getCoordX(),u.getCoordY(),ady.getCoordX(),ady.getCoordY());
+						
+						n = n.getSig();
+					}
+				}
+			}
+			for(int i=0;i<vectAdy.length;i++){
+				if(vectAdy[i] != null && !vectAdy[i].equals("")){
+					String[] coordenadas = vectAdy[i].split("%");
+					String x = coordenadas[0];
+					String y = coordenadas[1];
+					String x2 = coordenadas[2];
+					String y2 = coordenadas[3];
+					
+					retorno += ruta + coordx + x + coordy + y + coordx + x2 + coordy + y2;
 				}
 			}
 		}
@@ -305,5 +331,28 @@ public class GrafoCoordenada {
 		}
 		
 		return retorno;
+	}
+
+	private String[] agregarTramo(String[] vectAdy, double coordX, double coordY, double coordX2, double coordY2) {
+		String tramo = coordX + "%" + coordY + "%" + coordX2 + "%" + coordY2;
+		for(int i = 0;i<vectAdy.length;i++){
+			if(noEstaTramo(vectAdy,coordX,coordY,coordX2,coordY2) && (vectAdy[i]== null || vectAdy[i].equals(""))){
+				vectAdy[i] = tramo;
+				return vectAdy;
+			}
+		}
+		return vectAdy;
+	}
+
+	private boolean noEstaTramo(String[] vectAdy, double coordX, double coordY, double coordX2, double coordY2) {
+		String ida = coordX + "%" + coordY + "%" + coordX2 + "%" + coordY2;
+		String vuelta = coordX2 + "%" + coordY2 + "%" + coordX + "%" + coordY;
+		
+		for(int i = 0;i<vectAdy.length;i++){
+			if(vectAdy[i] != null && (vectAdy[i].equals(ida) || vectAdy[i].equals(vuelta)))
+				return false;
+		}
+		
+		return true;
 	}
 }

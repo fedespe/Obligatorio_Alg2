@@ -55,12 +55,12 @@ public class GrafoLista {
     public GrafoLista(int n) {
         this.size = n;
         this.cantNodosUtilizados = 0;
-        this.listaAdyacencia = new Lista[this.size+1];
+        this.listaAdyacencia = new Lista[this.size];
         for (int i = 0; i<this.size; i++)
             this.listaAdyacencia[i]= new Lista();		
 
-        this.nodosUsados = new boolean[this.size+1];
-        this.datosNodosUsados = new Object[this.size+1];
+        this.nodosUsados = new boolean[this.size];
+        this.datosNodosUsados = new Object[this.size];
     }
     
     public void agregarVertice(int v, Object o) {
