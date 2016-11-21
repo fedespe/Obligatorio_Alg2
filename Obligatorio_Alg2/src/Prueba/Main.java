@@ -111,7 +111,9 @@ public class Main {
         
         //Requerimiento 3.1 - Mapa de estado
         p.ver(s.mapaEstado().resultado, Retorno.Resultado.OK, "Se abre el navegador por defecto con el mapa de estado.");
-        
+        //Requerimiento 3.4 - Listado de empresas
+        p.ver(s.listadoRedMinima().resultado, Retorno.Resultado.OK, "Se lista la red minima.");
+
         //Requerimiento 3.4 - Listado de empresas
         p.ver(s.listadoEmpresas().resultado, Retorno.Resultado.OK, "Se retorna el listado de las empresas en orden por nombre en mandera ascendente.");
         

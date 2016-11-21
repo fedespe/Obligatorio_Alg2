@@ -368,35 +368,70 @@ public class GrafoCoordenada {
 		
 		while(bandera && contador <= grafo.getSize()-1){
 			for(int i=0;i<grafo.getSize();i++){
-				if(!visitados[i]){
+				//La primera vez no tienen que estar visitados
+				if(contador==1){
 					Nodo aux = grafo.getListaAdyacencia()[i].getInicio();
-					if(finMinimo == null && aux != null){
-						finMinimo = aux;
-						inicioMinimo = i;
-					}
-					
-					while(aux != null){
+					if(aux!=null){
 						AristaLista aristaAux = (AristaLista)aux.getDato();
-						AristaLista aristaMin = (AristaLista)finMinimo.getDato();
 						
-						if(aristaAux.getPeso() < aristaMin.getPeso()){
+						if(finMinimo == null && aux != null){
 							finMinimo = aux;
 							inicioMinimo = i;
 						}
 						
-						aux = aux.getSig();
+						while(aux != null){	
+							aristaAux = (AristaLista)aux.getDato();
+							AristaLista aristaMin = (AristaLista)finMinimo.getDato();			
+							if(aristaAux.getPeso() < aristaMin.getPeso()){
+								finMinimo = aux;
+								inicioMinimo = i;
+							}
+							
+							aux = aux.getSig();
+						}
+					}				
+				}
+				else if(!visitados[i]){
+					
+					Nodo aux = grafo.getListaAdyacencia()[i].getInicio();
+					if(aux!=null){
+						AristaLista aristaAux = (AristaLista)aux.getDato();
+						
+						if(finMinimo == null && aux != null && visitados[aristaAux.getVerticeAdyacente()]){
+							finMinimo = aux;
+							inicioMinimo = i;
+						}
+						
+						while(aux != null){	
+							if(finMinimo == null && visitados[aristaAux.getVerticeAdyacente()]){
+								finMinimo = aux;
+								inicioMinimo = i;
+							}
+							if(finMinimo!=null){
+								aristaAux = (AristaLista)aux.getDato();
+								AristaLista aristaMin = (AristaLista)finMinimo.getDato();			
+								if(aristaAux.getPeso() < aristaMin.getPeso() && visitados[aristaAux.getVerticeAdyacente()]){
+									finMinimo = aux;
+									inicioMinimo = i;
+								}
+							}						
+							aux = aux.getSig();
+						}
 					}
+					
 				}
 			}
 			if(inicioMinimo != -1){
-				visitados[inicioMinimo] = true;
-				contador ++;
+				visitados[inicioMinimo] = true;				
 				AristaLista aristaMin = (AristaLista)finMinimo.getDato();
 				visitados[aristaMin.getVerticeAdyacente()] = true;
 				costoTotal += aristaMin.getPeso();
 				Ubicable ini = (Ubicable)grafo.getDatosNodosUsados()[inicioMinimo];
 				Ubicable fin = (Ubicable)grafo.getDatosNodosUsados()[aristaMin.getVerticeAdyacente()];
 				camino += ini.getNombre()+";"+fin.getNombre()+"|";
+				contador ++;
+				finMinimo = null;
+				inicioMinimo = -1;
 			}
 			else{
 				bandera = false;
