@@ -273,7 +273,7 @@ public class GrafoCoordenada {
 		String retorno = "http://maps.googleapis.com/maps/api/staticmap?size=1200x800&maptype=roadmap&sensor=false";
 		
 		if(!grafo.estaVacio()){
-			String[] vectAdy = new String[grafo.getSize()*(grafo.getSize()-1)/2];
+			String[] vectAdy = new String[grafo.getSize()*(grafo.getSize()+1)/2];
 			
 			for(int i=0;i<grafo.getSize();i++){
 				if(grafo.getNodosUsados()[i]){
@@ -295,7 +295,7 @@ public class GrafoCoordenada {
 							s += lil;
 						}
 						else{
-							s += c;
+							s += c.toLowerCase();
 						}
 					}
 					//s += label + i;
@@ -354,4 +354,58 @@ public class GrafoCoordenada {
 		
 		return true;
 	}
+
+	public String[] obtenerRedMinima() {
+		int costoTotal = 0;
+		String camino = "";
+		String[] retorno = new String[2];
+		boolean[] visitados = new boolean[grafo.getSize()];
+		boolean bandera = true;
+		int contador = 1;
+		
+		Nodo finMinimo = null;
+		int  inicioMinimo = -1;
+		
+		while(bandera && contador <= grafo.getSize()-1){
+			for(int i=0;i<grafo.getSize();i++){
+				if(!visitados[i]){
+					Nodo aux = grafo.getListaAdyacencia()[i].getInicio();
+					if(finMinimo == null && aux != null){
+						finMinimo = aux;
+						inicioMinimo = i;
+					}
+					
+					while(aux != null){
+						AristaLista aristaAux = (AristaLista)aux.getDato();
+						AristaLista aristaMin = (AristaLista)finMinimo.getDato();
+						
+						if(aristaAux.getPeso() < aristaMin.getPeso()){
+							finMinimo = aux;
+							inicioMinimo = i;
+						}
+						
+						aux = aux.getSig();
+					}
+				}
+			}
+			if(inicioMinimo != -1){
+				visitados[inicioMinimo] = true;
+				contador ++;
+				AristaLista aristaMin = (AristaLista)finMinimo.getDato();
+				visitados[aristaMin.getVerticeAdyacente()] = true;
+				costoTotal += aristaMin.getPeso();
+				Ubicable ini = (Ubicable)grafo.getDatosNodosUsados()[inicioMinimo];
+				Ubicable fin = (Ubicable)grafo.getDatosNodosUsados()[aristaMin.getVerticeAdyacente()];
+				camino += ini.getNombre()+";"+fin.getNombre()+"|";
+			}
+			else{
+				bandera = false;
+			}
+		}
+		
+		retorno[0] = camino;
+		retorno[1] = costoTotal+"";
+		return retorno;
+	}
+
 }

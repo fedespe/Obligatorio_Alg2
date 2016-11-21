@@ -83,6 +83,9 @@ public class Sistema implements ISistema {
 		if(capacidadCPUenHoras <= 0)
 			return new Retorno(Resultado.ERROR_2);
 		
+		if(mapa.coordenadasOcupadas(coordX, coordY))
+			return new Retorno(Resultado.ERROR_3);
+		
 		String clave=empresa;
 		NodoArbol buscado = arbolEmpresas.buscar(clave);
 		if(buscado == null)
@@ -90,9 +93,6 @@ public class Sistema implements ISistema {
 		
 		Empresa emp = (Empresa)buscado.getDato();
 		DataCenter nuevo = new DataCenter(nombre, coordX, coordY, emp, capacidadCPUenHoras, costoCPUporHora);
-		
-		if(mapa.coordenadasOcupadas(coordX, coordY))
-			return new Retorno(Resultado.ERROR_3);
 				
 		if(mapa.agregarVertice(nuevo))
 			return new Retorno(Resultado.OK);
@@ -201,8 +201,11 @@ public class Sistema implements ISistema {
 
 	@Override
 	public Retorno listadoRedMinima() {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		String[] redMinima = mapa.obtenerRedMinima();
+		
+		int costoTotal = Integer.parseInt(redMinima[1]);
+		Retorno retornar = new Retorno(Resultado.OK, redMinima[0], costoTotal);
+		return retornar;
 	}
 
 	@Override

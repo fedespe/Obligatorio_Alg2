@@ -75,13 +75,14 @@ public class GrafoLista {
         if(this.listaAdyacencia[origen].buscar(nueva)!=null){
         	throw new ObligatorioException("Ya existe arista");
         }
-        this.listaAdyacencia[origen].agregarInicio(nueva);
+        
         
         AristaLista nueva2=new AristaLista(origen, peso);
         if(this.listaAdyacencia[destino].buscar(nueva2)!=null){//Esta no es necesaria por que entraria en la otra exception antes
         	throw new ObligatorioException("Ya existe arista");
         }
         
+        this.listaAdyacencia[origen].agregarInicio(nueva);
         this.listaAdyacencia[destino].agregarInicio(nueva2);
     }
 
