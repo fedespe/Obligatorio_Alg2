@@ -40,8 +40,8 @@ public class Main {
         p.ver(s.inicializarSistema(11).resultado, Retorno.Resultado.OK, "Se inicializa el Sistema (con un máximo de 11 puntos).");
         
         //Requerimiento 2.1 - Registrar empresa
-        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email1@email.com", "Azul").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
         p.ver(s.registrarEmpresa("Empresa 2", "Dir 2", "Pais 2", "email2@email.com", "Verde").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
+        p.ver(s.registrarEmpresa("Empresa 1", "Dir 1", "Pais 1", "email1@email.com", "Azul").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
         p.ver(s.registrarEmpresa("Empresa 3", "Dir 3", "Pais 3", "email3@email.com", "Lila").resultado, Retorno.Resultado.OK, "Se registra una empresa.");
         
         //Requerimiento 2.2 - Registrar ciudad
@@ -111,6 +111,9 @@ public class Main {
         
         //Requerimiento 3.1 - Mapa de estado
         p.ver(s.mapaEstado().resultado, Retorno.Resultado.OK, "Se abre el navegador por defecto con el mapa de estado.");
+        
+        //Requerimiento 3.4 - Listado de empresas
+        p.ver(s.listadoEmpresas().resultado, Retorno.Resultado.OK, "Se retorna el listado de las empresas en orden por nombre en mandera ascendente.");
         
         //Requerimiento 1.2 - Destruir Sistema
         p.ver(s.destruirSistema().resultado, Retorno.Resultado.OK, "Se destruye el Sistema.");

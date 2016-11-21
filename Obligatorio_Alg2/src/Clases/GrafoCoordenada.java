@@ -21,10 +21,10 @@ public class GrafoCoordenada {
 			verticeOrigen=hash(origen.getCoordX(),origen.getCoordY(),i);
 			//falta vertice destino, pero para todo esto tengo que tener un metodo que sea 
 			//buscar coordenadas en grafo y que me devuelva la posicion en el grafo
-			if(grafo.getDatosNodosUsados()[verticeOrigen].equals(origen)){
+			if(grafo.getDatosNodosUsados()[verticeOrigen] != null && grafo.getDatosNodosUsados()[verticeOrigen].equals(origen)){
 				for(int j=0;j<grafo.getSize();j++){
 					verticeDestino=hash(destino.getCoordX(),destino.getCoordY(),j);
-					if(grafo.getDatosNodosUsados()[verticeDestino].equals(destino)){
+					if(grafo.getDatosNodosUsados()[verticeDestino] != null && grafo.getDatosNodosUsados()[verticeDestino].equals(destino)){
 						grafo.agregarArista(verticeOrigen, verticeDestino, peso);//Tira una exception si ya existe la arista
 						return;
 					}
@@ -58,10 +58,10 @@ public class GrafoCoordenada {
 			verticeOrigen=hash(origen.getCoordX(),origen.getCoordY(),i);
 			//falta vertice destino, pero para todo esto tengo que tener un metodo que sea 
 			//buscar coordenadas en grafo y que me devuelva la posicion en el grafo
-			if(grafo.getDatosNodosUsados()[verticeOrigen].equals(origen)){
+			if(grafo.getDatosNodosUsados()[verticeOrigen]!= null && grafo.getDatosNodosUsados()[verticeOrigen].equals(origen)){
 				for(int j=0;j<grafo.getSize();j++){
 					verticeDestino=hash(destino.getCoordX(),destino.getCoordY(),j);
-					if(grafo.getDatosNodosUsados()[verticeDestino].equals(destino)){
+					if(grafo.getDatosNodosUsados()[verticeDestino] != null && grafo.getDatosNodosUsados()[verticeDestino].equals(destino)){
 						grafo.eliminarArista(verticeOrigen, verticeDestino);//Tira una exception si ya existe la arista
 						return;
 					}
@@ -302,7 +302,6 @@ public class GrafoCoordenada {
 					s+= coordx + u.getCoordX() + coordy + u.getCoordY();
 					retorno += s;
 					
-					//&path=color:0xff0000ff%7Cweight:3%7C-30.92,%20-57.44%7C-31.58,%20-55.24
 					Nodo n = ((Lista)grafo.getListaAdyacencia()[i]).getInicio();
 					while(n != null){
 						int adyacente = ((AristaLista)n.getDato()).getVerticeAdyacente();

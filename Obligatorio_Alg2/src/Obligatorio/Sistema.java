@@ -43,8 +43,7 @@ public class Sistema implements ISistema {
 		if(!Utilidades.verificarEmail(email_contacto))
 			return new Retorno(Resultado.ERROR_1);
 		
-		//Calculo la clave como un valor numerico
-		int clave=Utilidades.calcularClave(nombre);
+		String clave=nombre;
 		NodoArbol buscado = arbolEmpresas.buscar(clave);
 		Empresa nueva = new Empresa(nombre, direccion, pais, email_contacto, color);
 		
@@ -84,7 +83,7 @@ public class Sistema implements ISistema {
 		if(capacidadCPUenHoras <= 0)
 			return new Retorno(Resultado.ERROR_2);
 		
-		int clave=Utilidades.calcularClave(empresa);
+		String clave=empresa;
 		NodoArbol buscado = arbolEmpresas.buscar(clave);
 		if(buscado == null)
 			return new Retorno(Resultado.ERROR_4);
@@ -187,8 +186,8 @@ public class Sistema implements ISistema {
 		Ubicable v = new Ubicable("",coordX, coordY);
 		
 		try {
-			System.out.println(mapa.procesarInformacion(v, esfuerzoCPUrequeridoEnHoras));
-			return new Retorno(Resultado.OK);
+			String ret = mapa.procesarInformacion(v, esfuerzoCPUrequeridoEnHoras);
+			return new Retorno(Resultado.OK, ret, 0);
 		} catch (ObligatorioException e) {
 			if(e.getMessage().equals("No existe un DataCenter que pueda procesar la información."))
 					return new Retorno(Resultado.ERROR_2);
@@ -208,8 +207,16 @@ public class Sistema implements ISistema {
 
 	@Override
 	public Retorno listadoEmpresas() {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		
+		String ret = arbolEmpresas.retornarDatosInOrden("");
+		ret = ret.substring(0,ret.length()-1);
+		
+		Retorno retornar = new Retorno(Resultado.OK, ret, 0);
+		
+		//System.out.println("Listado de empresas:");
+		//System.out.println(retornar.valorString);
+		
+		return retornar;
 	}
 
 		

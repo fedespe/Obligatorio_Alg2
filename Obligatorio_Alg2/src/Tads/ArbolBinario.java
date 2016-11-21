@@ -38,19 +38,19 @@ public class ArbolBinario implements IArbolBinario{
     //PRE:
     //POS: Agrega un nuevo nodo al Arbol
     @Override
-    public void add(int clave, Object dato){
+    public void add(String clave, Object dato){
             if(this.isEmpty()){
                     NodoArbol nuevo = new NodoArbol(clave, dato);
                     this.raiz = nuevo;
                     this.cantidadNodos++;
             }else{
                     ArbolBinario aux = new ArbolBinario();
-                    if (clave<this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())< 0){
                             aux.raiz = this.raiz.getIzq();
                             aux.add(clave, dato);
                             this.raiz.setIzq(aux.raiz);
                     }
-                    if (clave>this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave()) > 0){
                             aux.raiz = this.raiz.getDer();
                             aux.add(clave, dato);
                             this.raiz.setDer(aux.raiz);
@@ -98,16 +98,16 @@ public class ArbolBinario implements IArbolBinario{
     //POS: Retorna true si la clave se encuentra en el arbol
     //SE PUEDE MODIFICAR PARA QUE RETORNE EL NODO DEL ARBOL
     @Override
-    public boolean existe(int clave){
+    public boolean existe(String clave){
             if(!this.isEmpty()){
                     ArbolBinario aux = new ArbolBinario();
-                    if (clave==this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())==0){
                             return true;
                     }
-                    if (clave<this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())<0){
                             aux.raiz = this.raiz.getIzq();
                     }
-                    if (clave>this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())>0){
                             aux.raiz = this.raiz.getDer();
                     }
                     return aux.existe(clave);
@@ -118,16 +118,16 @@ public class ArbolBinario implements IArbolBinario{
     //PRE: 
     //POS: Retorna el nodo encontrado
     @Override
-    public NodoArbol buscar(int clave){
+    public NodoArbol buscar(String clave){
             if(!this.isEmpty()){
                     ArbolBinario aux = new ArbolBinario();
-                    if (clave==this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())==0){
                             return this.raiz;
                     }
-                    if (clave<this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())<0){
                             aux.raiz = this.raiz.getIzq();
                     }
-                    if (clave>this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())>0){
                             aux.raiz = this.raiz.getDer();
                     }
                     return aux.buscar(clave);
@@ -137,18 +137,18 @@ public class ArbolBinario implements IArbolBinario{
 	
     //Post: 0 no existe la clave en el arbol. Si la clave corresponde a la raiz retorna 1.
     @Override
-    public int nivel(int clave){
+    public int nivel(String clave){
             int respuesta = 0;
             if(!this.isEmpty()){
                     ArbolBinario aux = new ArbolBinario();
-                    if (clave==this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())==0){
                             return 1;
                     }
 
-                    if (clave<this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())<0){
                             aux.raiz = this.raiz.getIzq();
                     }
-                    if (clave>this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())>0){
                             aux.raiz = this.raiz.getDer();
                     }
                     respuesta = aux.nivel(clave);
@@ -238,12 +238,25 @@ public class ArbolBinario implements IArbolBinario{
                     auxIzq.raiz = this.raiz.getIzq();
                     auxIzq.inOrden();
 
-                    System.out.print(this.raiz.getClave() + ":"+ this.raiz.getDato() +" - ");
+                    System.out.print(this.raiz.getClave() + ":"+ this.raiz.getDato().toString() +" - ");
 
                     ArbolBinario auxDer = new ArbolBinario();
                     auxDer.raiz = this.raiz.getDer();
                     auxDer.inOrden();
             }
+    }
+    
+    public String retornarDatosInOrden(String retorno){
+    	if(this.isEmpty()){
+    		return "";
+    	}
+    	
+        ArbolBinario auxIzq = new ArbolBinario();
+        auxIzq.raiz = this.raiz.getIzq();
+        ArbolBinario auxDer = new ArbolBinario();
+        auxDer.raiz = this.raiz.getDer();
+        
+        return retorno + auxIzq.retornarDatosInOrden(retorno) + this.raiz.getDato().toString()+"|" + auxDer.retornarDatosInOrden(retorno); 
     }
 	
 //	public void postOrden(){
@@ -313,7 +326,7 @@ public class ArbolBinario implements IArbolBinario{
      */
    //SE PUEDE MEJORAR
     @Override
-    public void eliminar(int a) {
+    public void eliminar(String a) {
         NodoArbol paraEliminar = buscar(a);
         ArbolBinario subArbol=new ArbolBinario();
         subArbol.setRaiz(paraEliminar);
@@ -330,7 +343,7 @@ public class ArbolBinario implements IArbolBinario{
                     NodoArbol aux=nuevoSubArb.buscarMinDer();
                     this.borrarHoja(aux.getClave());
                     NodoArbol padre =this.padre(subArbol.raiz.getClave());
-                    if(subArbol.raiz.getClave()>padre.getClave()){
+                    if(subArbol.raiz.getClave().compareTo(padre.getClave())>0){
                         padre.setDer(aux);
                     }else padre.setIzq(aux);
                     aux.setIzq(subArbol.raiz.getIzq());
@@ -339,12 +352,12 @@ public class ArbolBinario implements IArbolBinario{
                 else {
                     NodoArbol padre =this.padre(subArbol.raiz.getClave());
                     if (subArbol.raiz.getIzq()==null) {                   
-                        if(subArbol.raiz.getClave()>padre.getClave()){
+                        if(subArbol.raiz.getClave().compareTo(padre.getClave())>0){
                         padre.setDer(subArbol.raiz.getDer());
                         }else padre.setIzq(subArbol.raiz.getDer());
                         
                     }else{
-                        if(subArbol.raiz.getClave()>padre.getClave()){
+                        if(subArbol.raiz.getClave().compareTo(padre.getClave())>0){
                         padre.setDer(subArbol.raiz.getIzq());
                         }else padre.setIzq(subArbol.raiz.getIzq());
                     }
@@ -355,7 +368,7 @@ public class ArbolBinario implements IArbolBinario{
 
     //pre: la clave pertenece a una hoja
     //SE PUIEDE MEJORAR UTILIZANDO LA DE PADRE
-    public void borrarHoja(int clave){
+    public void borrarHoja(String clave){
             if(!this.isEmpty()){
                     ArbolBinario aux = new ArbolBinario();
                     if (clave==this.raiz.getClave()){
@@ -370,10 +383,10 @@ public class ArbolBinario implements IArbolBinario{
                             this.raiz.setDer(null);
                             aux.raiz=null;
                     }
-                    if (this.raiz!=null && clave<this.raiz.getClave()){
+                    if (this.raiz!=null && clave.compareTo(this.raiz.getClave())<0){
                             aux.raiz = this.raiz.getIzq();
                     }
-                    if (this.raiz!=null && clave>this.raiz.getClave()){
+                    if (this.raiz!=null && clave.compareTo(this.raiz.getClave())>0){
                             aux.raiz = this.raiz.getDer();
                     }
                     aux.borrarHoja(clave);
@@ -382,10 +395,10 @@ public class ArbolBinario implements IArbolBinario{
     //funcion que me retorna el nodo padre
     //pre: no es raiz
     //NO ES BUENO QUE RECORRA EL ARBOL PARA BUSCAR EL PADRE
-    public NodoArbol padre(int clave){
+    public NodoArbol padre(String clave){
             if(!this.isEmpty()){
                     ArbolBinario aux = new ArbolBinario();
-                    if (clave==this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave()) ==0){
                             this.raiz=null;
                     }
                     if (this.raiz.getIzq()!=null && clave==this.raiz.getIzq().getClave()){
@@ -394,10 +407,10 @@ public class ArbolBinario implements IArbolBinario{
                     if (this.raiz.getDer()!=null && clave==this.raiz.getDer().getClave()){
                             return this.raiz;
                     }
-                    if (clave<this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave())<0){
                             aux.raiz = this.raiz.getIzq();
                     }
-                    if (clave>this.raiz.getClave()){
+                    if (clave.compareTo(this.raiz.getClave()) >0){
                             aux.raiz = this.raiz.getDer();
                     }
                     return aux.padre(clave);

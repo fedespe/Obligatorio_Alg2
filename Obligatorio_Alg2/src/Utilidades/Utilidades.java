@@ -10,8 +10,10 @@ public class Utilidades {
 	
 	public static int calcularClave(String nombre) {
 		int retorno=0;
-		for(int i=0;i<nombre.length();i++){
-			retorno+=(int)nombre.charAt(i)*i;
+		String may = nombre.toUpperCase();
+		
+		for(int i=0;i<may.length();i++){
+			retorno+=(int)may.charAt(i)*i;
 		}
 		return retorno;
 	}

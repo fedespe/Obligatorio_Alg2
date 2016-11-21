@@ -49,5 +49,9 @@ public class Empresa {
         Empresa o=(Empresa)obj;
        return this.nombre == o.getNombre();
     }
+	@Override
+	public String toString(){
+		return nombre + ";" + email_contacto;
+	}
 	
 }

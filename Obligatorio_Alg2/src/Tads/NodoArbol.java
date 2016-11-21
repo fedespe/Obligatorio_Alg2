@@ -6,22 +6,22 @@ public class NodoArbol {
     private Object dato;
     private NodoArbol izq;
     private NodoArbol der;
-    private int clave;
+    private String clave;
 
 
 
-    public NodoArbol(int clave,Object dato) {
+    public NodoArbol(String clave,Object dato) {
             this.dato = dato;
             this.izq = null;
             this.der = null;
             this.clave=clave;
     }
 
-    public void setClave(int clave) {
+    public void setClave(String clave) {
         this.clave = clave;
     }
 
-    public int getClave() {
+    public String getClave() {
         return clave;
     }
 
